@@ -2,13 +2,12 @@
 from pathlib import Path
 from typing import Annotated
 
-from rich import print as rprint
 import typer
+
 from ensembl_cli.handlers.file_handler import FileReader, FileWriter
 from ensembl_cli.handlers.file_spec import FieldRule, FileSpec
-
 from ensembl_cli.services.vep_service import VEPService
-
+from ensembl_cli.utils import print_table_with_message
 
 app = typer.Typer()
 vep_app = typer.Typer(name="vep", help="Fetch variant consequences")
@@ -54,10 +53,17 @@ def get_consequences_by_ids(
     )
     vep_service.fetch_and_process_by_variant_identifiers()
 
-    rprint(
-        ":pencil: [green] variant consequences output file:[/green] "
-        f"[pink] -- {vep_service.output_writer.file_path}[/pink]"
-    )
+    if vep_service.error_message:
+        print_table_with_message(
+            f":warning:  [bold red]{vep_service.error_message}[/bold red] :warning:",
+            style="red",
+        )
+    else:
+        print_table_with_message(
+            ":white_check_mark: [green] variant consequences output file:[/green] "
+            f"[pink] {vep_service.output_writer.file_path}[/pink]",
+            style="green",
+        )
 
 
 @vep_app.command("hgvs")
@@ -65,7 +71,8 @@ def get_consequences_by_hgvs_notations():
     """
     Fetch variant consequences for multiple hgvs notations
     """
-    rprint(
-        "[bold red]:construction: Not implemented! "
-        "Coming soon! :construction:[/bold red]"
+    print_table_with_message(
+        "[orange_red1]:construction: Not implemented! "
+        "Coming soon! :construction:[/orange_red1]",
+        style="orange_red1",
     )
