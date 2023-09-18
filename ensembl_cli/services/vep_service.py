@@ -17,18 +17,22 @@ class VEPService:
         self.input_reader = input_file_reader
         self.output_writer = output_file_writer
         self.file_spec = file_spec
+        self.error_message = None
 
     def fetch_and_process_by_variant_identifiers(self):
-        # Read IDs from file
-        for ids in self.input_reader.read_ids_from_file():
-            # Fetch data from Ensembl
-            raw_data = api.get_consequences_by_variant_ids(ids)
+        try:
+            # Read IDs from file
+            for ids in self.input_reader.read_ids_from_file():
+                # Fetch data from Ensembl
+                raw_data = api.get_consequences_by_variant_ids(ids)
 
-            # Parse the data based on FileSpec rules
-            parsed_data = self.file_spec.parse_data(raw_data)
+                # Parse the data based on FileSpec rules
+                parsed_data = self.file_spec.parse_data(raw_data)
 
-            # Write the parsed data to a new file
-            self.output_writer.write_file(parsed_data)
+                # Write the parsed data to a new file
+                self.output_writer.write_file(parsed_data)
+        except Exception as error:
+            self.error_message = str(error)
 
     def fetch_and_by_hgvs_notations(self, hgvs_annotations):
         pass
