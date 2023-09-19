@@ -74,6 +74,8 @@ def test_no_valid_rsid_variant_ids(cli_runner, no_valid_rsid_variant_ids):
     assert results.exit_code == 0
     assert "No ids successfully fetched" in results.stdout
     assert not Path(output_file_path).exists()
+    # asserition if fetching in bulk
+    # assert "No variant found with ID 'rs1'" in results.stdout
 
 
 @pytest.mark.e2e

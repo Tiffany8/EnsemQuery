@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from typing import Dict, List, Generator
 
-from ensembl_cli.utils import is_valid_variant_id
+from ensemquery.utils import is_valid_variant_id
 
 
 CHUNK_SIZE = 1000

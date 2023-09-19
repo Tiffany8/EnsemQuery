@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "ensembl_cli"
+name = "EnsemQuery"
 version = "0.1.0"
-description = "Fetch variant consequences based on a variant identifier"
+description = "A CLI for fetching and saving genetic data from Ensembl endpoints. Currently supports VEP, designed for future extensibility."
 authors = ["Tiffany R. Williams <trowilliams@gmail.com>"]
 readme = "README.md"
 
@@ -9,9 +9,10 @@ readme = "README.md"
 python = "^3.10"
 typer = { extras = ["all"], version = "^0.9.0" }
 requests = "^2.31.0"
+pytest = "^7.4.2"
+ruff = "^0.0.289"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.0.289"
 pytest = "^7.4.2"
 
 [build-system]
@@ -19,11 +20,11 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-ensembl = 'ensembl_cli.__main__:app'
+eqry = 'ensemquery.__main__:app'
 
 [tool.ruff]
 line-length = 88
-src = ["ensembl_cli"]
+src = ["ensemquery"]
 
 [tool.pytest.ini_options]
 markers = [

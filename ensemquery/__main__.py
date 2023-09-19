@@ -1,4 +1,4 @@
-from ensembl_cli.cli import app
+from ensemquery.cli import app
 
 
 if __name__ == "__main__":

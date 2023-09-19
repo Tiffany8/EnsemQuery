@@ -4,7 +4,7 @@ from functools import partial
 import pytest
 from typer.testing import CliRunner
 
-from ensembl_cli.cli import app
+from ensemquery.cli import app
 
 
 @pytest.fixture

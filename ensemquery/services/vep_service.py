@@ -1,6 +1,6 @@
-from ensembl_cli import ensembl_api as api
-from ensembl_cli.handlers.file_handler import FileReader, FileWriter
-from ensembl_cli.handlers.file_spec import FileSpec
+from ensemquery import ensembl_api as api
+from ensemquery.handlers.file_handler import FileReader, FileWriter
+from ensemquery.handlers.file_spec import FileSpec
 
 
 class VEPService:

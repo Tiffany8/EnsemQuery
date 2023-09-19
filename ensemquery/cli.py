@@ -5,10 +5,10 @@ from typing import Annotated
 from rich.progress import Progress, SpinnerColumn
 import typer
 
-from ensembl_cli.handlers.file_handler import FileReader, FileWriter
-from ensembl_cli.handlers.file_spec import FieldRule, FileSpec
-from ensembl_cli.services.vep_service import VEPService
-from ensembl_cli.utils import print_table_with_message
+from ensemquery.handlers.file_handler import FileReader, FileWriter
+from ensemquery.handlers.file_spec import FieldRule, FileSpec
+from ensemquery.services.vep_service import VEPService
+from ensemquery.utils import print_table_with_message
 
 app = typer.Typer()
 vep_app = typer.Typer(name="vep", help="Fetch variant consequences")
@@ -59,7 +59,7 @@ def get_consequences_by_ids(
     ) as progress:
         task = progress.add_task("[cyan]Fetching data...")
 
-        vep_service.fetch_and_process_bulk()
+        vep_service.fetch_and_process_single()
 
         progress.remove_task(task)
 
@@ -80,7 +80,7 @@ def get_consequences_by_ids(
             [
                 [
                     (
-                        ":warning:  [bold red]No ids succsessfully fetched"
+                        ":warning:  [bold red]No ids successfully fetched"
                         "[/bold red] :warning:"
                     )
                 ]
