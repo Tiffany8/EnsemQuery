@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 from rich.console import Console
 from rich.table import Table
@@ -17,11 +18,16 @@ def is_valid_variant_id(id: str) -> bool:
     )
 
 
-def print_table_with_message(message: str, style: str = None):
+def print_table_with_message(
+    message: List[List[str]], style: str = None, columns: List[str] = []
+):
     console = Console()
     table = Table(box=box.ROUNDED)
-    table.show_header = False
+    table.show_header = bool([])
+    for column in columns:
+        table.add_column(column, no_wrap=False)
     if style:
         table.style = style
-    table.add_row(message)
+    for row in message:
+        table.add_row(*row)
     console.print(table)

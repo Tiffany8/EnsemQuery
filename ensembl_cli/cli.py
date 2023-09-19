@@ -41,6 +41,7 @@ def get_consequences_by_ids(
         output_file_writer=FileWriter(file_name=output_fn, file_directory=output_dir),
         file_spec=FileSpec(
             [
+                FieldRule("id"),
                 FieldRule("start"),
                 FieldRule("end"),
                 FieldRule("most_severe_consequence"),
@@ -58,21 +59,55 @@ def get_consequences_by_ids(
     ) as progress:
         task = progress.add_task("[cyan]Fetching data...")
 
-        vep_service.fetch_and_process_by_variant_identifiers()
+        vep_service.fetch_and_process_bulk()
 
         progress.remove_task(task)
 
     if vep_service.error_message:
         print_table_with_message(
-            f":warning:  [bold red]{vep_service.error_message}[/bold red] :warning:",
+            [
+                [
+                    (
+                        f":warning:  [bold red]{vep_service.error_message}"
+                        "[/bold red] :warning:"
+                    )
+                ]
+            ],
+            style="red",
+        )
+    elif not vep_service.successful_ids_count:
+        print_table_with_message(
+            [
+                [
+                    (
+                        ":warning:  [bold red]No ids succsessfully fetched"
+                        "[/bold red] :warning:"
+                    )
+                ]
+            ],
             style="red",
         )
     else:
-        print_table_with_message(
-            ":white_check_mark: [green] variant consequences output file:[/green] "
-            f"[pink] {vep_service.output_writer.file_path}[/pink]",
-            style="green",
-        )
+        rows = [
+            [
+                ":white_check_mark:",
+                "[green]output file[/green]",
+                str(vep_service.output_writer.file_path),
+            ]
+        ]
+
+        if vep_service.failed_ids:
+            rows.append(
+                [
+                    ":x:",
+                    "[red]failed ids[/red]",
+                    ", ".join(vep_service.failed_ids)
+                    if vep_service.failed_ids
+                    else "--",
+                ]
+            )
+
+        print_table_with_message(rows, style="green", columns=["", "", ""])
 
 
 @vep_app.command("hgvs")
@@ -81,7 +116,11 @@ def get_consequences_by_hgvs_notations():
     Fetch variant consequences for multiple hgvs notations
     """
     print_table_with_message(
-        "[orange_red1]:construction: Not implemented! "
-        "Coming soon! :construction:[/orange_red1]",
+        [
+            [
+                "[orange_red1]:construction: Not implemented! "
+                "Coming soon! :construction:[/orange_red1]"
+            ]
+        ],
         style="orange_red1",
     )
