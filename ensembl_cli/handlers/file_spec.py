@@ -40,8 +40,8 @@ class FileSpec:
         parsed_data = {}
         for fr in self.field_rules:
             parsed_data[fr.field] = (
-                fr.rule(raw_data.get(fr.field, None))
-                if fr.rule
+                fr.rule(raw_data.get(fr.field))
+                if fr.rule and raw_data.get(fr.field)
                 else raw_data.get(fr.field, None)
             )
         return parsed_data

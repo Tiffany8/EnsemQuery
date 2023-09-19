@@ -81,12 +81,16 @@ class FileReader:
 
 class FileWriter:
     def __init__(
-        self, file_name: str = None, format: FileFormatInfo = FileFormatInfo.TAB
+        self,
+        file_name: str = None,
+        file_directory: str = None,
+        format: FileFormatInfo = FileFormatInfo.TAB,
     ):
         self.format = format
-        self.filename = file_name if file_name else self.generate_file_name()
+        self.filename = file_name or self.generate_file_name()
         self.file_path = Path(
-            os.getcwd(), Path(self.filename).with_suffix(self.format.extension)
+            file_directory or os.getcwd(),
+            Path(self.filename).with_suffix(self.format.extension),
         )
 
     def generate_file_name(self):

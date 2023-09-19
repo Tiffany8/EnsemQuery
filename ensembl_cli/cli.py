@@ -25,10 +25,11 @@ def get_consequences_by_ids(
             writable=False,
             readable=True,
             resolve_path=True,
-            help="File of variant ids",
+            help="Txt file of variant ids - one per line",
         ),
     ],
     output_fn=Annotated[str, typer.Option(help="Custom output file name")],
+    output_dir=Annotated[str, typer.Option(help="Output file directory")],
 ):
     """
     Fetch variant consequences for multiple variant ids
@@ -37,7 +38,7 @@ def get_consequences_by_ids(
 
     # Initialize VEP service with dependencies
     vep_service = VEPService(
-        output_file_writer=FileWriter(file_name=output_fn),
+        output_file_writer=FileWriter(file_name=output_fn, file_directory=output_dir),
         file_spec=FileSpec(
             [
                 FieldRule("start"),

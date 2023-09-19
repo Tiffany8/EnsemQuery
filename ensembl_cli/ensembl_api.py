@@ -12,7 +12,11 @@ def post_ensembl(endpoint: str, params: Dict) -> Dict:
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as error:
-        raise error
+        # Trying to return a more useful error message for the end user
+        # for example, rather than "400 Client Error: Bad Request for url:
+        # https://rest.ensembl.org/vep/human/id",
+        # the user will see "No variant found with ID 'rs1'"
+        raise Exception(response.json().get("error")) or error
 
 
 def get_ensembl(endpoint: str) -> Dict:
