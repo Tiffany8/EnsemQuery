@@ -78,6 +78,25 @@ def no_valid_rsid_variant_ids(data_dir):
 
 
 @pytest.fixture
+def empty_input_file(data_dir):
+    input_file_path = os.path.join(data_dir, "empty_input_file.txt")
+    output_fn = "empty_input_file_output.tsv"
+
+    txt_data = ""
+    with open(input_file_path, "w") as file:
+        file.write(txt_data)
+
+    yield {
+        "input_file_path": input_file_path,
+        "output_fn": output_fn,
+        "output_dir": data_dir,
+    }
+
+    # Clean up the created files after the test
+    os.remove(input_file_path)
+
+
+@pytest.fixture
 def invalid_file_extension(data_dir):
     input_file_path = os.path.join(data_dir, "invalid_file_extension.csv")
     output_fn = "invalid_file_extension_output.tsv"

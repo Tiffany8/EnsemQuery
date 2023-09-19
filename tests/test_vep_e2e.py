@@ -72,7 +72,7 @@ def test_no_valid_rsid_variant_ids(cli_runner, no_valid_rsid_variant_ids):
     output_file_path = os.path.join(data["output_dir"], data["output_fn"])
 
     assert results.exit_code == 0
-    assert "No variant found with ID 'rs1'" in results.stdout
+    assert "No ids successfully fetched" in results.stdout
     assert not Path(output_file_path).exists()
 
 
@@ -99,3 +99,22 @@ def test_cosmic_variant_ids(cli_runner, cosmic_variant_id):
     with open(output_file_path, "r") as f:
         lines = f.readlines()
         assert len(lines) == 2
+
+
+@pytest.mark.e2e
+def test_empty_input_file(cli_runner, empty_input_file):
+    data = empty_input_file
+    results = cli_runner(
+        [
+            "vep",
+            "ids",
+            data["input_file_path"],
+            "--output-fn",
+            data["output_fn"],
+            "--output-dir",
+            data["output_dir"],
+        ]
+    )
+
+    assert results.exit_code == 0
+    assert "File is empty" in results.stdout
