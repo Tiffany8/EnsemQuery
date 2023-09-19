@@ -2,6 +2,7 @@
 from pathlib import Path
 from typing import Annotated
 
+from rich.progress import Progress, SpinnerColumn
 import typer
 
 from ensembl_cli.handlers.file_handler import FileReader, FileWriter
@@ -36,7 +37,6 @@ def get_consequences_by_ids(
     (dbSNP, COSMIC and HGMD identifiers)
     """
 
-    # Initialize VEP service with dependencies
     vep_service = VEPService(
         output_file_writer=FileWriter(file_name=output_fn, file_directory=output_dir),
         file_spec=FileSpec(
@@ -52,7 +52,15 @@ def get_consequences_by_ids(
         ),
         input_file_reader=FileReader(file),
     )
-    vep_service.fetch_and_process_by_variant_identifiers()
+
+    with Progress(
+        SpinnerColumn(), "[progress.description]{task.description}"
+    ) as progress:
+        task = progress.add_task("[cyan]Fetching data...")
+
+        vep_service.fetch_and_process_by_variant_identifiers()
+
+        progress.remove_task(task)
 
     if vep_service.error_message:
         print_table_with_message(
